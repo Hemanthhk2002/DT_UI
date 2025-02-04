@@ -6,15 +6,15 @@ function App() {
   const apiUrl = "https://dt-api-226g.onrender.com/api/v1/table-data";
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-600 to-purple-700">
+    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-600 to-purple-700 p-3">
       <div className="min-h-screen w-full px-4 flex flex-col">
         {/* Hero Section */}
         <div className="text-center py-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            Welcome to Our Platform
+            Welcome 
           </h1>
-          <p className="text-lg text-gray-200 mb-6">
-            Discover the power of data visualization with our interactive table
+          <p className="text-4xl text-gray-200 mb-6">
+           Data visualization with our interactive table
             component
           </p>
           <button
