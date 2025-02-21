@@ -110,7 +110,7 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/api/v1/trip/create", {
+      const response = await fetch("https://dt-api-226g.onrender.com/api/v1/trip/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tripData),

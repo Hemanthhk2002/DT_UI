@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { TableFromAPIMultiple } from "@hemanthhk/eshipz-table-library";
 import MapPlot from "./components/mapPlot"; // Update the path as necessary
-import dotenv from "dotenv";
 
 function App() {
   const [showTable, setShowTable] = useState(false);
