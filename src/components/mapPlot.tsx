@@ -13,6 +13,7 @@ import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
+import apiClient from "../apiClient";
 
 const containerStyle = { width: "100%", height: "100%" };
 
@@ -34,7 +35,7 @@ type LocationState = {
 interface MapPlotProps {
   mapsApi: string;
 }
-const tripCreateUrl = import.meta.env.VITE_TRIP_CREATE_API_URL;
+// const tripCreateUrl = import.meta.env.VITE_TRIP_CREATE_API_URL;
 const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
   const [origin, setOrigin] = useState<LocationState>({
     address: null,
@@ -110,23 +111,14 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
     };
 
     try {
-      const response = await fetch(tripCreateUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(tripData),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        alert("Trip saved successfully! 🚀");
-      } else {
-        alert("Failed to save trip: " + data.error);
-      }
-    } catch (error) {
-      console.error("Error submitting trip:", error);
-      alert("Error submitting trip. Check console for details.");
-    }
-  };
+    const response = await apiClient.post('/trip/create', tripData);
+    console.log("API Response:", response); 
+    alert("Trip saved successfully! 🚀");
+  } catch (error) {
+    console.error("Error submitting trip:", error);
+    alert("Error submitting trip. Check console for details.");
+  }
+};
 
   const fetchDirections = useCallback(() => {
     if (origin.coordinates && destination.coordinates) {

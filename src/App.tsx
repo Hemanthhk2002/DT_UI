@@ -3,9 +3,8 @@ import { TableFromAPIMultiple } from "@hemanthhk/eshipz-table-library";
 import MapPlot from "./components/mapPlot"; // Update the path as necessary
 
 function App() {
-  const [showTable, setShowTable] = useState(false);
-  const [showMapPlot, setShowMapPlot] = useState(false);
-  const apiUrl = "https://dt-api-226g.onrender.com/api/v1/table-data";
+  const [activeComponent, setActiveComponent] = useState<string | null>(null);
+  const apiUrl = import.meta.env.VITE_TRIP_LIST_API_URL;
   const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   return (
@@ -17,41 +16,46 @@ function App() {
           <p className="text-4xl text-gray-200 mb-6">
             Data visualization with our interactive table component
           </p>
-          <button
-            onClick={() => setShowTable(!showTable)}
-            className="bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold 
-                     shadow-lg hover:shadow-xl transition-all duration-300 
-                     hover:bg-gray-100 mb-8"
-          >
-            {showTable ? "Hide Table" : "Show Table"}
-          </button>
-          <button
-            onClick={() => {
-              console.log("Create Trip button clicked");
-              console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-              setShowMapPlot(true);
-            }}
-            className="bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold 
-           shadow-lg hover:shadow-xl transition-all duration-300 
-           hover:bg-gray-100 mb-8"
-          >
-            Create Trip
-          </button>
-        </div>
-
-        {/* Table Section */}
-        <div
-          className={`flex-1 transition-all duration-500 ${
-            showTable ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div className="h-full w-full bg-gray-50 rounded-lg shadow-xl">
-            {showTable && <TableFromAPIMultiple apiUrl={apiUrl} />}
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={() => setActiveComponent("tripsList")}
+              className={`px-6 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300 
+              ${
+                activeComponent === "tripsList"
+                  ? "bg-gray-100 text-indigo-600"
+                  : "bg-white text-indigo-600 hover:bg-gray-100"
+              }`}
+            >
+              Trips List
+            </button>
+            <button
+              onClick={() => setActiveComponent("createTrip")}
+              className={`px-6 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300 
+              ${
+                activeComponent === "createTrip"
+                  ? "bg-gray-100 text-indigo-600"
+                  : "bg-white text-indigo-600 hover:bg-gray-100"
+              }`}
+            >
+              Create Trip
+            </button>
           </div>
         </div>
 
-        {/* Map Plot Section */}
-        {showMapPlot && <MapPlot mapsApi={GOOGLE_MAPS_API_KEY} />}
+        {/* Show the selected component */}
+        <div className="flex-1 transition-all duration-500">
+          {activeComponent === "tripsList" && (
+            <div className="h-full w-full bg-gray-50 rounded-lg shadow-xl p-4">
+              <TableFromAPIMultiple apiUrl={apiUrl} />
+            </div>
+          )}
+
+          {activeComponent === "createTrip" && (
+            <div className="h-full w-full bg-gray-50 rounded-lg shadow-xl p-4">
+              <MapPlot mapsApi={GOOGLE_MAPS_API_KEY} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
