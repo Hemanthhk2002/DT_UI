@@ -34,7 +34,7 @@ type LocationState = {
 interface MapPlotProps {
   mapsApi: string;
 }
-
+const tripCreateUrl = import.meta.env.VITE_TRIP_CREATE_API_URL;
 const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
   const [origin, setOrigin] = useState<LocationState>({
     address: null,
@@ -110,7 +110,7 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
     };
 
     try {
-      const response = await fetch("https://dt-api-226g.onrender.com/api/v1/trip/create", {
+      const response = await fetch(tripCreateUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(tripData),
