@@ -15,7 +15,7 @@ import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import apiClient from "../apiClient";
 
-const containerStyle = { width: "100%", height: "100%" };
+// const containerStyle = { width: "100%", height: "100%" };
 
 type Coordinates = {
   lat: number;
@@ -111,14 +111,14 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
     };
 
     try {
-    const response = await apiClient.post('/trip/create', tripData);
-    console.log("API Response:", response); 
-    alert("Trip saved successfully! 🚀");
-  } catch (error) {
-    console.error("Error submitting trip:", error);
-    alert("Error submitting trip. Check console for details.");
-  }
-};
+      const response = await apiClient.post("/trip/create", tripData);
+      console.log("API Response:", response);
+      alert("Trip saved successfully! 🚀");
+    } catch (error) {
+      console.error("Error submitting trip:", error);
+      alert("Error submitting trip. Check console for details.");
+    }
+  };
 
   const fetchDirections = useCallback(() => {
     if (origin.coordinates && destination.coordinates) {
@@ -149,40 +149,40 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
   }, [origin, destination]);
 
   return (
-    <div className="h-screen bg-gray-100">
-      <div className="p-6 bg-white shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-6">
+      {/* Trip Details Card */}
+      <div className="bg-white p-4 md:p-6 shadow-md rounded-lg">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 text-center">
           Trip Details
         </h2>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <input
             type="text"
             placeholder="Trip ID"
             value={tripId}
             onChange={(e) => setTripId(e.target.value)}
-            className="p-3 border rounded-lg shadow-sm"
+            className="p-3 border rounded-lg shadow-sm w-full"
           />
           <input
             type="text"
             placeholder="LR Number"
             value={lrNumber}
             onChange={(e) => setLrNumber(e.target.value)}
-            className="p-3 border rounded-lg shadow-sm"
+            className="p-3 border rounded-lg shadow-sm w-full"
           />
           <input
             type="text"
             placeholder="Vehicle Number"
             value={vehicleNumber}
             onChange={(e) => setVehicleNumber(e.target.value)}
-            className="p-3 border rounded-lg shadow-sm"
+            className="p-3 border rounded-lg shadow-sm w-full"
           />
-
           {/* Vehicle Type Dropdown */}
           <select
             value={vehicleType}
             onChange={(e) => setVehicleType(e.target.value)}
-            className="p-3 border rounded-lg shadow-sm"
+            className="p-3 border rounded-lg shadow-sm w-full"
           >
             <option value="">Select Vehicle Type</option>
             <option value="Container Truck">Container Truck</option>
@@ -191,38 +191,36 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
             <option value="Tanker Truck">Tanker Truck</option>
             <option value="Curtain Side Truck">Curtain Side Truck</option>
           </select>
-
           <input
             type="text"
             placeholder="Tracking Mode"
             value={trackingMode}
             onChange={(e) => setTrackingMode(e.target.value)}
-            className="p-3 border rounded-lg shadow-sm"
+            className="p-3 border rounded-lg shadow-sm w-full"
           />
           <input
             type="text"
             placeholder="TeleOperator"
             value={teleOperator}
             onChange={(e) => setTeleOperator(e.target.value)}
-            className="p-3 border rounded-lg shadow-sm"
+            className="p-3 border rounded-lg shadow-sm w-full"
           />
         </div>
       </div>
 
-      {/* Second Section - Left Fields & Map View */}
-      <div className="flex h-auto">
-        {/* Left Panel - Form (2/3 width) */}
-        <div className="w-2/3 p-6 bg-white shadow-md">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+      {/* Trip Information & Map Section */}
+      <div className="flex flex-col md:flex-row gap-6 mt-6">
+        {/* Left Panel - Trip Information */}
+        <div className="bg-white p-4 md:p-6 shadow-md rounded-lg w-full md:w-2/3">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-700 mb-4">
             Trip Information
           </h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <PlacesAutocomplete
               selectProps={{
                 value: origin.address,
-                onChange: (place) =>
-                  handleSelect(place as PlaceOption, setOrigin),
+                onChange: (place) => handleSelect(place, setOrigin),
                 placeholder: "Origin",
                 className: "w-full p-3 border rounded-lg shadow-sm",
               }}
@@ -230,58 +228,67 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
             <PlacesAutocomplete
               selectProps={{
                 value: destination.address,
-                onChange: (place) =>
-                  handleSelect(place as PlaceOption, setDestination),
+                onChange: (place) => handleSelect(place, setDestination),
                 placeholder: "Destination",
                 className: "w-full p-3 border rounded-lg shadow-sm",
               }}
             />
+
             <input
               type="text"
               placeholder="Driver Number"
               value={driverNumber}
               onChange={(e) => setDriverNumber(e.target.value)}
-              className="p-3 border rounded-lg shadow-sm"
+              className="w-full p-3 border rounded-lg shadow-sm"
             />
             <input
               type="text"
               placeholder="Driver Name (Optional)"
               value={driverName}
               onChange={(e) => setDriverName(e.target.value)}
-              className="p-3 border rounded-lg shadow-sm"
+              className="w-full p-3 border rounded-lg shadow-sm"
             />
 
-            {/* Created At & ETA with Date & Time Picker */}
-            <DateTimePicker
-              onChange={setCreatedAt}
-              value={createdAt}
-              className="p-3 border rounded-lg shadow-sm"
-            />
-
-            <DateTimePicker
-              onChange={setEta}
-              value={eta}
-              className="p-3 border rounded-lg shadow-sm"
-            />
+            {/* Responsive DateTimePickers */}
+            <div className="w-full">
+              <DateTimePicker
+                onChange={setCreatedAt}
+                value={createdAt}
+                className="w-full p-3 border rounded-lg shadow-sm"
+              />
+            </div>
+            <div className="w-full">
+              <DateTimePicker
+                onChange={setEta}
+                value={eta}
+                className="w-full p-3 border rounded-lg shadow-sm"
+              />
+            </div>
 
             <input
               type="text"
               placeholder="TAT Days"
               value={tatDays}
               onChange={(e) => setTatDays(e.target.value)}
-              className="p-3 border rounded-lg shadow-sm"
+              className="w-full p-3 border rounded-lg shadow-sm"
             />
+
+            {/* Dropdown for Status */}
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="p-3 border rounded-lg shadow-sm"
+              className="w-full p-3 border rounded-lg shadow-sm"
             >
               <option value="">Select Status</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
-              <option value="Enroute to Destination">Enroute to Destination</option>
-              <option value="Driver Consent Pending">Driver Consent Pending</option>
+              <option value="Enroute to Destination">
+                Enroute to Destination
+              </option>
+              <option value="Driver Consent Pending">
+                Driver Consent Pending
+              </option>
             </select>
 
             <input
@@ -289,27 +296,29 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
               placeholder="Branch"
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
-              className="p-3 border rounded-lg shadow-sm col-span-2"
+              className="w-full p-3 border rounded-lg shadow-sm col-span-1 md:col-span-2"
             />
           </div>
 
-          <button
-            onClick={fetchDirections}
-            className="mt-6 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
-          >
-            Get Directions
-          </button>
+          <div className="flex flex-col md:flex-row gap-4 mt-6">
+            <button
+              onClick={fetchDirections}
+              className="w-full md:w-auto px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
+            >
+              Get Directions
+            </button>
 
-          <button
-            onClick={handleSubmit}
-            className="mt-4 px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
-          >
-            Submit Trip
-          </button>
+            <button
+              onClick={handleSubmit}
+              className="w-full md:w-auto px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
+            >
+              Submit Trip
+            </button>
+          </div>
         </div>
 
-        {/* Right Panel - Map View (1/3 width) */}
-        <div className="w-1/3 h-auto">
+        {/* Right Panel - Map */}
+        <div className="bg-white shadow-md rounded-lg w-full md:w-1/3 p-4">
           {!showMap ? (
             <div className="h-full flex items-center justify-center text-gray-600 text-lg font-semibold animate-fadeIn">
               <p>
@@ -321,7 +330,7 @@ const MapPlot: React.FC<MapPlotProps> = ({ mapsApi }) => {
             origin.coordinates &&
             destination.coordinates && (
               <GoogleMap
-                mapContainerStyle={containerStyle}
+                mapContainerStyle={{ width: "100%", height: "300px" }}
                 zoom={6}
                 center={origin.coordinates}
               >
